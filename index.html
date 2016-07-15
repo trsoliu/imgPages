@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>图片翻页</title>
+	<style type="text/css">
+		*{margin: 0;padding: 0;}
+		ul>li{
+			list-style: none;
+			width: 500px;
+			height: 650px;
+			margin-left: -250px;
+			position:absolute;
+			left:50%;
+			top:35px;
+			transform-origin: left;
+		}
+		p{
+			color: blue;
+			font-weight: bold;
+			text-align: center;
+			width: 100%;
+			position:absolute;
+			top: 10px;
+			}
+		.prev{cursor: pointer;}
+		.next{cursor: pointer;}
+	</style>
+	</head>
+	<body>
+		<p>
+			<a class="prev">上一页</a>
+			<a class="next">下一页</a>
+		</p>
+		<ul class="imgPages"></ul>
+<script type="text/javascript">
+		var ele=document.getElementsByTagName('li');
+		var prev=document.getElementsByClassName('prev')[0];
+		var next=document.getElementsByClassName('next')[0];
+		var Pages=function(count,sum,className){
+			this.count=count;//图片起始的位置
+			this.sum=sum;//图片数量
+			this.className=className;
+		};
+		Pages.prototype={
+			  init:function(){
+			  			//初始化函数
+						var ul=document.getElementsByClassName(this.className)[0];
+						var sum=this.sum;
+						var list=null;
+						var count=this.count;
+//						初始化按钮的颜色
+						count===0 && this._btnColor(prev);
+						count===sum-1 && this._btnColor(next);
+						for(var li=0;li<sum;li++){
+							list=document.createElement('li');
+							ul.appendChild(list);
+						}
+						for(var i=0;i<ele.length;i++){
+							/*改变图片页数、位置、大小*/
+							ele[i].style.display='none';
+							ele[count].style.display='block';
+							ele[i].style.background="url('images/"+i+".jpg') no-repeat";
+						}
+			  		},
+			prevFn:function(){
+						var count=this.count;
+						if(count>0){
+							next.style.color='blue';
+							ele[count].style.display='none';
+							ele[count-1].style.display='block';
+//							判断是不是第一张,若是,则按钮置灰
+							count===1 && this._btnColor(prev);
+							return this.count--;
+						}
+					},
+			nextFn:function(){
+						var count=this.count;
+						if(count<ele.length-1){
+							prev.style.color='blue';
+							ele[count+1].style.display='block';
+							ele[count].style.display='none';
+//							判断是不是最后一张,若是,则按钮置灰
+							count===ele.length-2 && this._btnColor(next);
+							return this.count++;
+						};
+				},
+				//按钮的颜色和对象，类内部私有方法
+			_btnColor:function(e){
+				e.style.color='#f0f0f0';
+			}
+		};
+//		创建一个图片切换的对象，传入初始显示的图片，和总共展示的图片数以及图片存放的ul的class名称
+		var pagesFn=new Pages(0,7,'imgPages');
+//		初始化对象
+		pagesFn.init();
+//		点击图片查看下一张
+		for(var j in ele){
+			ele[j].onclick=function(){
+				pagesFn.nextFn();
+			}
+		}
+//		查看上一张
+		prev.onclick=function(){pagesFn.prevFn();}
+//		查看下一张
+		next.onclick=function(){pagesFn.nextFn();}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+</script>
+	</body>
+	</html>
